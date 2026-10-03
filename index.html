@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Dew Point House Monitor</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background: #f4f7f9;
+      color: #1f2933;
+    }
+
+    header {
+      background: #17324d;
+      color: white;
+      padding: 20px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    section {
+      background: white;
+      border-radius: 10px;
+      margin-bottom: 24px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: #17324d;
+    }
+
+    .placeholder {
+      padding: 30px;
+      text-align: center;
+      background: #eef3f6;
+      border-radius: 8px;
+      color: #52606d;
+    }
+
+    .scroll-container {
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: max-content;
+      min-width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid #d9e2ec;
+      padding: 8px 10px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #eef3f6;
+      font-weight: 600;
+    }
+
+    .location {
+      text-align: left;
+      font-weight: 600;
+      background: #f7f9fa;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 100px 100px;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .input-row label {
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 9px;
+      border: 1px solid #bcccdc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    button.primary {
+      background: #1769aa;
+      color: white;
+    }
+
+    button.secondary {
+      background: #e4e7eb;
+      color: #1f2933;
+    }
+
+    button.danger {
+      background: #c53030;
+      color: white;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    @media (max-width: 700px) {
+      main {
+        padding: 10px;
+      }
+
+      section {
+        padding: 14px;
+      }
+
+      .input-row {
+        grid-template-columns: 1fr 80px 80px;
+      }
+
+      input {
+        padding: 8px 5px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Dew Point House Monitor</h1>
+    <p>Wallands Park, Lewes</p>
+  </header>
+
+  <main>
+
+    <!-- MET OFFICE FORECAST -->
+
+    <section>
+      <h2>Met Office forecast</h2>
+
+      <div class="placeholder">
+        Met Office forecast will appear here.
+      </div>
+    </section>
+
+
+    <!-- TODAY'S READINGS -->
+
+    <section>
+      <h2>Today's readings</h2>
+
+      <p>
+        Enter temperature and relative humidity for any locations you
+        measured, then press <strong>Save readings</strong>.
+      </p>
+
+      <div class="scroll-container">
+
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Outside<br>Temp / RH</th>
+              <th>Bedroom<br>Temp / RH</th>
+              <th>Landing<br>Temp / RH</th>
+              <th>Study<br>Temp / RH</th>
+              <th>Kitchen<br>Temp / RH</th>
+              <th>Basement<br>Temp / RH</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody id="readings-table">
+          </tbody>
+        </table>
+
+      </div>
+
+      <div class="button-row">
+        <button class="secondary" id="add-reading">
+          + Add reading
+        </button>
+
+        <button class="primary" id="save-readings">
+          Save readings
+        </button>
+      </div>
+
+    </section>
+
+
+    <!-- HISTORY -->
+
+    <section>
+      <h2>History</h2>
+
+      <div class="scroll-container">
+
+        <table id="history-table">
+
+          <thead>
+            <tr>
+              <th>Location</th>
+              <!-- Historical dates will be inserted here -->
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="location">Temperature</td>
+            </tr>
+
+            <tr>
+              <td class="location">Relative humidity</td>
+            </tr>
+
+            <tr>
+              <td class="location">Dew point</td>
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    const locations = [
+      "Outside",
+      "Bedroom",
+      "Landing",
+      "Study",
+      "Kitchen",
+      "Basement"
+    ];
+
+
+    function createReadingRow() {
+
+      const tbody = document.getElementById("readings-table");
+
+      const row = document.createElement("tr");
+
+      const timeCell = document.createElement("td");
+      timeCell.textContent = "Not saved";
+
+      row.appendChild(timeCell);
+
+
+      locations.forEach((location, index) => {
+
+        const cell = document.createElement("td");
+
+        const temp = document.createElement("input");
+        temp.type = "number";
+        temp.step = "0.1";
+        temp.placeholder = "°C";
+        temp.className = "temperature";
+        temp.dataset.location = location;
+
+        const humidity = document.createElement("input");
+        humidity.type = "number";
+        humidity.step = "1";
+        humidity.min = "0";
+        humidity.max = "100";
+        humidity.placeholder = "%";
+        humidity.className = "humidity";
+        humidity.dataset.location = location;
+
+        cell.appendChild(temp);
+        cell.appendChild(document.createElement("br"));
+        cell.appendChild(humidity);
+
+        row.appendChild(cell);
+
+      });
+
+
+      const deleteCell = document.createElement("td");
+
+      const deleteButton = document.createElement("button");
+
+      deleteButton.textContent = "Delete";
+      deleteButton.className = "danger";
+
+      deleteButton.addEventListener("click", () => {
+        row.remove();
+      });
+
+      deleteCell.appendChild(deleteButton);
+
+      row.appendChild(deleteCell);
+
+      tbody.appendChild(row);
+    }
+
+
+    document
+      .getElementById("add-reading")
+      .addEventListener("click", createReadingRow);
+
+
+    document
+      .getElementById("save-readings")
+      .addEventListener("click", () => {
+
+        alert(
+          "Database connection will be added next. " +
+          "Your readings have not been saved yet."
+        );
+
+      });
+
+
+    // Start with one reading row.
+    createReadingRow();
+
+  </script>
+
+</body>
+</html>
