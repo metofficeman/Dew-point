@@ -61,20 +61,20 @@
       color: #17324d;
     }
 
-    .placeholder {
-      padding: 30px;
-      text-align: center;
-      background: #eef3f6;
-      border-radius: 8px;
-      color: #52606d;
-    }
+    /* --------------------------------------------------------
+       Forecast
+    -------------------------------------------------------- */
 
-    .scroll-container {
+    .forecast-scroll,
+    .history-scroll,
+    .saved-readings-scroll {
       overflow-x: auto;
       width: 100%;
     }
 
-    table {
+    .forecast-table,
+    .history-table,
+    .saved-table {
       border-collapse: collapse;
       width: max-content;
       min-width: 100%;
@@ -83,7 +83,7 @@
     th,
     td {
       border: 1px solid #d9e2ec;
-      padding: 8px 10px;
+      padding: 9px 12px;
       text-align: center;
       white-space: nowrap;
     }
@@ -93,31 +93,60 @@
       font-weight: 600;
     }
 
-    .location {
+    .row-heading {
+      position: sticky;
+      left: 0;
+      background: #f7f9fa;
       text-align: left;
       font-weight: 600;
-      background: #f7f9fa;
+      z-index: 2;
     }
 
-    .input-row {
-      display: grid;
-      grid-template-columns: 1fr 100px 100px;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 10px;
+    .forecast-placeholder {
+      padding: 25px;
+      text-align: center;
+      background: #eef3f6;
+      border-radius: 8px;
+      color: #52606d;
     }
 
-    .input-row label {
-      font-weight: 500;
-    }
+    /* --------------------------------------------------------
+       Input table
+    -------------------------------------------------------- */
 
-    input {
+    .input-table {
       width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .input-table th,
+    .input-table td {
+      padding: 8px;
+    }
+
+    .input-table th:first-child,
+    .input-table td:first-child {
+      text-align: left;
+    }
+
+    .input-table input {
+      width: 100%;
+      min-width: 90px;
       padding: 9px;
       border: 1px solid #bcccdc;
       border-radius: 6px;
       font-size: 1rem;
     }
+
+    .input-table input:focus {
+      outline: 2px solid #7fb3d5;
+      border-color: #1769aa;
+    }
+
+    /* --------------------------------------------------------
+       Buttons
+    -------------------------------------------------------- */
 
     button {
       border: none;
@@ -144,13 +173,97 @@
       font-size: 0.8rem;
     }
 
+    button:hover {
+      opacity: 0.9;
+    }
+
     .button-row {
       display: flex;
       gap: 10px;
       margin-top: 15px;
+      flex-wrap: wrap;
     }
 
+    /* --------------------------------------------------------
+       Saved readings
+    -------------------------------------------------------- */
+
+    .saved-readings {
+      margin-top: 25px;
+    }
+
+    .saved-readings h3 {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .empty-message {
+      color: #697b8c;
+      font-size: 0.9rem;
+    }
+
+    /* --------------------------------------------------------
+       History
+    -------------------------------------------------------- */
+
+    .history-table th,
+    .history-table td {
+      min-width: 90px;
+    }
+
+    .history-table .date-heading {
+      background: #dceaf4;
+      font-weight: 600;
+    }
+
+    .history-location {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: #f7f9fa;
+      text-align: left;
+      font-weight: 600;
+      min-width: 120px;
+    }
+
+    .history-metric {
+      position: sticky;
+      left: 120px;
+      z-index: 2;
+      background: white;
+      text-align: left;
+      min-width: 100px;
+    }
+
+    /* --------------------------------------------------------
+       Status
+    -------------------------------------------------------- */
+
+    .status {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 6px;
+      display: none;
+    }
+
+    .status.success {
+      display: block;
+      background: #e6f4ea;
+      color: #256029;
+    }
+
+    .status.error {
+      display: block;
+      background: #fde8e8;
+      color: #9b1c1c;
+    }
+
+    /* --------------------------------------------------------
+       Mobile
+    -------------------------------------------------------- */
+
     @media (max-width: 700px) {
+
       main {
         padding: 10px;
       }
@@ -159,14 +272,20 @@
         padding: 14px;
       }
 
-      .input-row {
-        grid-template-columns: 1fr 80px 80px;
+      header {
+        padding: 15px;
       }
 
-      input {
-        padding: 8px 5px;
+      header h1 {
+        font-size: 1.25rem;
       }
+
+      .input-table {
+        min-width: 500px;
+      }
+
     }
+
   </style>
 </head>
 
@@ -177,92 +296,169 @@
     <p>Wallands Park, Lewes</p>
   </header>
 
+
   <main>
 
-    <!-- MET OFFICE FORECAST -->
+    <!-- =====================================================
+         MET OFFICE FORECAST
+    ====================================================== -->
 
     <section>
+
       <h2>Met Office forecast</h2>
 
-      <div class="placeholder">
-        Met Office forecast will appear here.
-      </div>
-    </section>
+      <div class="forecast-scroll">
 
-
-    <!-- TODAY'S READINGS -->
-
-    <section>
-      <h2>Today's readings</h2>
-
-      <p>
-        Enter temperature and relative humidity for any locations you
-        measured, then press <strong>Save readings</strong>.
-      </p>
-
-      <div class="scroll-container">
-
-        <table>
-          <thead>
-            <tr>
-              <th>Time</th>
-              <th>Outside<br>Temp / RH</th>
-              <th>Bedroom<br>Temp / RH</th>
-              <th>Landing<br>Temp / RH</th>
-              <th>Study<br>Temp / RH</th>
-              <th>Kitchen<br>Temp / RH</th>
-              <th>Basement<br>Temp / RH</th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <tbody id="readings-table">
-          </tbody>
-        </table>
-
-      </div>
-
-      <div class="button-row">
-        <button class="secondary" id="add-reading">
-          + Add reading
-        </button>
-
-        <button class="primary" id="save-readings">
-          Save readings
-        </button>
-      </div>
-
-    </section>
-
-
-    <!-- HISTORY -->
-
-    <section>
-      <h2>History</h2>
-
-      <div class="scroll-container">
-
-        <table id="history-table">
+        <table class="forecast-table">
 
           <thead>
             <tr>
-              <th>Location</th>
-              <!-- Historical dates will be inserted here -->
+              <th class="row-heading">Time</th>
             </tr>
           </thead>
 
           <tbody>
+
             <tr>
-              <td class="location">Temperature</td>
+              <td class="row-heading">Temperature</td>
             </tr>
 
             <tr>
-              <td class="location">Relative humidity</td>
+              <td class="row-heading">Relative humidity</td>
             </tr>
 
             <tr>
-              <td class="location">Dew point</td>
+              <td class="row-heading">Dew point</td>
             </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <div class="forecast-placeholder">
+        Met Office forecast will appear here once the API connection is configured.
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         TODAY'S INPUTS
+    ====================================================== -->
+
+    <section>
+
+      <h2>Today's readings</h2>
+
+      <p>
+        Enter the temperature and/or relative humidity for any locations
+        you have measured. The time will be recorded when you press
+        <strong>Save readings</strong>.
+      </p>
+
+
+      <div class="forecast-scroll">
+
+        <table class="input-table">
+
+          <thead>
+
+            <tr>
+              <th>Location</th>
+              <th>Temperature °C</th>
+              <th>RH %</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="input-table-body">
+
+            <!-- Created by JavaScript -->
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div class="button-row">
+
+        <button
+          class="secondary"
+          id="add-reading">
+          + Add reading
+        </button>
+
+        <button
+          class="primary"
+          id="save-readings">
+          Save readings
+        </button>
+
+      </div>
+
+
+      <div
+        id="status"
+        class="status">
+      </div>
+
+
+      <!-- ---------------------------------------------------
+           SAVED READINGS TODAY
+      ---------------------------------------------------- -->
+
+      <div class="saved-readings">
+
+        <h3>Today's saved readings</h3>
+
+        <div
+          id="saved-readings"
+          class="saved-readings-scroll">
+
+          <p class="empty-message">
+            No readings saved today.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         HISTORY
+    ====================================================== -->
+
+    <section>
+
+      <h2>History</h2>
+
+      <p>
+        The history shows the first complete temperature + RH reading
+        for each location on each day.
+      </p>
+
+      <div class="history-scroll">
+
+        <table
+          class="history-table"
+          id="history-table">
+
+          <thead id="history-head">
+
+            <!-- Created by JavaScript -->
+
+          </thead>
+
+          <tbody id="history-body">
+
+            <!-- Created by JavaScript -->
+
           </tbody>
 
         </table>
@@ -274,10 +470,17 @@
   </main>
 
 
-    <!-- Supabase JavaScript library -->
+  <!-- =======================================================
+       SUPABASE
+  ======================================================== -->
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Our application -->
+
+  <!-- =======================================================
+       APPLICATION
+  ======================================================== -->
+
   <script src="app.js"></script>
 
 </body>
