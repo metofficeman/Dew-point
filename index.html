@@ -274,99 +274,11 @@
   </main>
 
 
-  <script>
+    <!-- Supabase JavaScript library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    const locations = [
-      "Outside",
-      "Bedroom",
-      "Landing",
-      "Study",
-      "Kitchen",
-      "Basement"
-    ];
-
-
-    function createReadingRow() {
-
-      const tbody = document.getElementById("readings-table");
-
-      const row = document.createElement("tr");
-
-      const timeCell = document.createElement("td");
-      timeCell.textContent = "Not saved";
-
-      row.appendChild(timeCell);
-
-
-      locations.forEach((location, index) => {
-
-        const cell = document.createElement("td");
-
-        const temp = document.createElement("input");
-        temp.type = "number";
-        temp.step = "0.1";
-        temp.placeholder = "°C";
-        temp.className = "temperature";
-        temp.dataset.location = location;
-
-        const humidity = document.createElement("input");
-        humidity.type = "number";
-        humidity.step = "1";
-        humidity.min = "0";
-        humidity.max = "100";
-        humidity.placeholder = "%";
-        humidity.className = "humidity";
-        humidity.dataset.location = location;
-
-        cell.appendChild(temp);
-        cell.appendChild(document.createElement("br"));
-        cell.appendChild(humidity);
-
-        row.appendChild(cell);
-
-      });
-
-
-      const deleteCell = document.createElement("td");
-
-      const deleteButton = document.createElement("button");
-
-      deleteButton.textContent = "Delete";
-      deleteButton.className = "danger";
-
-      deleteButton.addEventListener("click", () => {
-        row.remove();
-      });
-
-      deleteCell.appendChild(deleteButton);
-
-      row.appendChild(deleteCell);
-
-      tbody.appendChild(row);
-    }
-
-
-    document
-      .getElementById("add-reading")
-      .addEventListener("click", createReadingRow);
-
-
-    document
-      .getElementById("save-readings")
-      .addEventListener("click", () => {
-
-        alert(
-          "Database connection will be added next. " +
-          "Your readings have not been saved yet."
-        );
-
-      });
-
-
-    // Start with one reading row.
-    createReadingRow();
-
-  </script>
+  <!-- Our application -->
+  <script src="app.js"></script>
 
 </body>
 </html>
