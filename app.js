@@ -3,8 +3,8 @@
 // Main application
 // ============================================================
 
-const SUPABASE_URL = "PASTE-YOUR-SUPABASE-PROJECT-URL-HERE";
-const SUPABASE_PUBLISHABLE_KEY = "PASTE-YOUR-SUPABASE-PUBLISHABLE-KEY-HERE";
+const SUPABASE_URL = "https://ejhmxgqqycjvhqvkhgld.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Qch7eIhtZ1PvhQUE4RozMg_tW0b1EaB";
 
 const LOCATIONS = [
   { id: "outside", name: "Outside" },
